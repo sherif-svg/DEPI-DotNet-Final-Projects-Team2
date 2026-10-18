@@ -8,3 +8,4 @@ public class BloodRequestDTO
     public int Quantity { get; set; }
     public RequestStatus Status { get; set; }
 }
+DTOs/BloodRequestDTO.cs
