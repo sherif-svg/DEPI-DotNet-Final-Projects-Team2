@@ -5,6 +5,13 @@ namespace BloodDonationPlatform.Services.Implementations;
 
 public class MockMatchingService : IMatchingService
 {
+    private readonly ILocationService _locationService;
+
+    public MockMatchingService(ILocationService locationService)
+    {
+        _locationService = locationService;
+    }
+
     // Maps a recipient/required blood type to the donor types that are medically compatible.
     private readonly Dictionary<string, List<string>> _compatibilityMap = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -45,6 +52,9 @@ public class MockMatchingService : IMatchingService
             new() { Id = 4, Name = "Layla Mahmoud", BloodType = "AB-", Latitude = 30.0626, Longitude = 31.2497 }
         };
 
-        return mockDonors.Where(d => compatibleTypes.Contains(d.BloodType, StringComparer.OrdinalIgnoreCase));
+        return mockDonors
+            .Where(d => compatibleTypes.Contains(d.BloodType, StringComparer.OrdinalIgnoreCase))
+            .OrderBy(d => _locationService.CalculateDistanceInKilometers(
+                hospitalLat, hospitalLon, d.Latitude, d.Longitude));
     }
 }

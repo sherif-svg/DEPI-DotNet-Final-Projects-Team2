@@ -1,6 +1,6 @@
-namespace BloodDonationPlatform.Interfaces;
+namespace BloodDonationPlatform.Services.Interfaces;
 
 public interface ILocationService
 {
-    double CalculateDistance(double lat1, double lon1, double lat2, double lon2);
+    double CalculateDistanceInKilometers(double lat1, double lon1, double lat2, double lon2);
 }
