@@ -1,29 +1,31 @@
-﻿using BloodDonationPlatform.Models;
+﻿using BloodDonationPlatform.DTOs;
+using BloodDonationPlatform.Enums;
 using BloodDonationPlatform.Services.Interfaces;
 
-namespace BloodDonationPlatform.Services.Implementations
+namespace BloodDonationPlatform.Services.Implementations;
+
+public class BloodRequestService : IBloodRequestService
 {
-    public class BloodRequestService : IBloodRequestService
+    public Task<bool> CreateRequestAsync(BloodRequestDTO requestDto)
     {
-        public async Task<bool> CreateRequestAsync(BloodRequestDTO requestDto)
-        {
-            return await Task.FromResult(true);
-        }
+        ArgumentNullException.ThrowIfNull(requestDto);
 
-        public async Task<IEnumerable<BloodRequestDTO>> GetPendingRequestsAsync()
+        return Task.FromResult(true);
+    }
+
+    public Task<IEnumerable<BloodRequestDTO>> GetPendingRequestsAsync()
+    {
+        var mockData = new List<BloodRequestDTO>
         {
-            var mockData = new List<BloodRequestDTO>
+            new()
             {
-                new BloodRequestDTO
-                {
-                    HospitalId = 1,
-                    RequiredBloodType = "A+",
-                    Quantity = 5,
-                    Status = "Pending"
-                }
-            };
+                HospitalId = 1,
+                RequiredBloodType = BloodType.APositive,
+                Quantity = 5,
+                Status = RequestStatus.Pending
+            }
+        };
 
-            return await Task.FromResult(mockData);
-        }
+        return Task.FromResult<IEnumerable<BloodRequestDTO>>(mockData);
     }
 }

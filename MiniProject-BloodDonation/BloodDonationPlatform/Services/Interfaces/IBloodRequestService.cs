@@ -1,10 +1,10 @@
-﻿using BloodDonationPlatform.Models;
+﻿using BloodDonationPlatform.DTOs;
 
-namespace BloodDonationPlatform.Services.Interfaces
+namespace BloodDonationPlatform.Services.Interfaces;
+
+public interface IBloodRequestService
 {
-    public interface IBloodRequestService
-    {
-        Task<bool> CreateRequestAsync(BloodRequestDTO requestDto);
-        Task<IEnumerable<BloodRequestDTO>> GetPendingRequestsAsync();
-    }
+    Task<bool> CreateRequestAsync(BloodRequestDTO requestDto);
+
+    Task<IEnumerable<BloodRequestDTO>> GetPendingRequestsAsync();
 }

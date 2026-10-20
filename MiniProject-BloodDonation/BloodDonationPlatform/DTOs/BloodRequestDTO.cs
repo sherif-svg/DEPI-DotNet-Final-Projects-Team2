@@ -1,5 +1,7 @@
 using BloodDonationPlatform.Enums;
+
 namespace BloodDonationPlatform.DTOs;
+
 public class BloodRequestDTO
 {
     public int Id { get; set; }
@@ -8,4 +10,3 @@ public class BloodRequestDTO
     public int Quantity { get; set; }
     public RequestStatus Status { get; set; }
 }
-DTOs/BloodRequestDTO.cs
