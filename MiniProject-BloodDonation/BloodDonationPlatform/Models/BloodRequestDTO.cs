@@ -1,4 +1,4 @@
-﻿namespace BloodDonationPlatform.Models
+namespace BloodDonationPlatform.Models
 {
     public class BloodRequestDTO
     {
