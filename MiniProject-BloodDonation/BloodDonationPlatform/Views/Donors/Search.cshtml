@@ -1,0 +1,82 @@
+@model DonorSearchViewModel
+@using BloodDonationPlatform.Enums
+@{
+    ViewData["Title"] = "Donor search";
+}
+
+<div class="page-toolbar">
+    <div>
+        <span class="status-badge mb-2"><span class="status-dot"></span> Geo matching</span>
+        <h1 class="page-title mt-2">Search compatible donors</h1>
+        <p class="text-muted mb-0">Filter by recipient blood type and hospital coordinates. Results are ordered by eligibility, compatibility, then distance.</p>
+    </div>
+</div>
+
+<div class="card feature-card form-panel mb-4">
+    <div class="card-body p-4">
+        <form asp-action="Search" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label asp-for="BloodType" class="form-label">Recipient blood type</label>
+                <select asp-for="BloodType" class="form-select" asp-items="Html.GetEnumSelectList<BloodType>()">
+                    <option value="">All types</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Latitude" class="form-label"></label>
+                <input asp-for="Latitude" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Longitude" class="form-label"></label>
+                <input asp-for="Longitude" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="cta-btn cta-primary w-100 justify-content-center border-0">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3">
+@foreach (var match in Model.Results)
+{
+    <div class="col-md-6 col-xl-4">
+        <div class="card donor-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h2 class="h5 mb-0">@match.Donor.Name</h2>
+                    <span class="blood-badge @match.Donor.BloodType.ToBadgeCss()">@match.Donor.BloodType.ToDisplay()</span>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="distance-badge"><i class="bi bi-geo-alt-fill"></i> @match.DistanceKm km</span>
+                    @if (match.CompatibilityScore > 0)
+                    {
+                        <span class="score-badge">Compat @match.CompatibilityScore</span>
+                    }
+                    <span class="@(match.IsEligible ? "eligible-badge" : "wait-badge")">
+                        @(match.IsEligible ? "Eligible" : "Waiting / unavailable")
+                    </span>
+                </div>
+                <form asp-action="ToggleAvailability" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@match.Donor.Id" />
+                    <input type="hidden" name="isAvailable" value="@((!match.Donor.IsAvailable).ToString().ToLowerInvariant())" />
+                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" @(match.Donor.IsAvailable ? "checked" : null)
+                               onchange="this.form.submit()" />
+                        <label class="form-check-label">Availability toggle</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@if (!Model.Results.Any())
+{
+    <div class="col-12">
+        <div class="alert alert-light border">Run a search to rank donors by distance from the hospital pin.</div>
+    </div>
+}
+</div>

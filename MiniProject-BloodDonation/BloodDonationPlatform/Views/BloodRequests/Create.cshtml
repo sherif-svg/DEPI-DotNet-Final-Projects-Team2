@@ -1,0 +1,55 @@
+@model CreateBloodRequestViewModel
+@using BloodDonationPlatform.Enums
+@{
+    ViewData["Title"] = "Create blood request";
+}
+
+<div class="page-toolbar">
+    <div>
+        <span class="status-badge mb-2"><span class="status-dot"></span> New case</span>
+        <h1 class="page-title mt-2">Create blood request</h1>
+        <p class="text-muted mb-0">Requests start in <strong>Pending</strong> and move to Matching after review.</p>
+    </div>
+</div>
+
+<div class="card feature-card form-panel">
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="HospitalId" class="form-label"></label>
+                    <select asp-for="HospitalId" class="form-select" asp-items="@(new SelectList(Model.Hospitals, "Id", "Name"))">
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="RequiredBloodType" class="form-label"></label>
+                    <select asp-for="RequiredBloodType" class="form-select" asp-items="Html.GetEnumSelectList<BloodType>()"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Urgency" class="form-label"></label>
+                    <select asp-for="Urgency" class="form-select" asp-items="Html.GetEnumSelectList<UrgencyLevel>()"></select>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="Notes" class="form-label"></label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="cta-btn cta-primary border-0">
+                    <i class="bi bi-plus-lg"></i> Submit request
+                </button>
+                <a class="cta-btn cta-donor" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

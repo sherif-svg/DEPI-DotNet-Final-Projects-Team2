@@ -1,0 +1,55 @@
+@model IReadOnlyList<Donor>
+@{
+    ViewData["Title"] = "Donor directory";
+}
+
+<div class="page-toolbar">
+    <div>
+        <span class="status-badge mb-2"><span class="status-dot"></span> Verified registry</span>
+        <h1 class="page-title mt-2">Donors</h1>
+        <p class="text-muted mb-0">Toggle availability and honor the 56-day inter-donation gap.</p>
+    </div>
+    <a class="cta-btn cta-hospital" asp-action="Search">
+        <i class="bi bi-search"></i> Open search
+    </a>
+</div>
+
+<div class="row g-3">
+@foreach (var donor in Model)
+{
+    var eligible = donor.IsEligibleToDonate();
+    <div class="col-md-6 col-xl-4">
+        <div class="card donor-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h2 class="h5 mb-0">@donor.Name</h2>
+                    <span class="blood-badge @donor.BloodType.ToBadgeCss()">@donor.BloodType.ToDisplay()</span>
+                </div>
+                <p class="text-muted small mb-3">
+                    Last donation:
+                    @(donor.LastDonationDate?.ToLocalTime().ToString("d") ?? "Never")
+                    @if (!eligible && donor.DaysUntilEligible() > 0)
+                    {
+                        <span> · @donor.DaysUntilEligible() days remaining</span>
+                    }
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="@(eligible ? "eligible-badge" : "wait-badge")">
+                        @(eligible ? "Eligible" : "Not eligible")
+                    </span>
+                    <form asp-action="ToggleAvailability" method="post" class="m-0">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@donor.Id" />
+                        <input type="hidden" name="isAvailable" value="@((!donor.IsAvailable).ToString().ToLowerInvariant())" />
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" @(donor.IsAvailable ? "checked" : null)
+                                   onchange="this.form.submit()" />
+                            <label class="form-check-label small">Available</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</div>

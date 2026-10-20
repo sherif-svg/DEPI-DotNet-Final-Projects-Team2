@@ -1,0 +1,76 @@
+@model InventoryDashboardViewModel?
+@{
+    ViewData["Title"] = "Hospital inventory";
+}
+
+@if (Model is null)
+{
+    <div class="alert alert-warning">No hospital records are seeded yet. Apply migrations and restart the app.</div>
+}
+else
+{
+    <div class="page-toolbar">
+        <div>
+            <span class="status-badge mb-2"><span class="status-dot"></span> Live stock</span>
+            <h1 class="page-title mt-2">@Model.Hospital.Name</h1>
+            <p class="text-muted mb-0">
+                @Model.Hospital.City · Low-stock threshold is @HospitalInventory.LowStockThreshold units.
+                @if (Model.LowStockCount > 0)
+                {
+                    <span class="wait-badge ms-2">@Model.LowStockCount group(s) below 5 units</span>
+                }
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+    @foreach (var gauge in Model.Gauges)
+    {
+        <div class="col-md-6 col-xl-3">
+            <div class="card stock-card h-100 @(gauge.IsLowStock ? "stock-card-low" : "")">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="blood-badge @gauge.BloodType.ToBadgeCss()">@gauge.BloodType.ToDisplay()</span>
+                        @if (gauge.IsLowStock)
+                        {
+                            <span class="wait-badge">Low stock</span>
+                        }
+                    </div>
+                    <div class="stock-units">@gauge.Units <small>units</small></div>
+                    <div class="progress stock-progress mb-3">
+                        <div class="progress-bar @(gauge.IsLowStock ? "bg-danger" : "bg-success")"
+                             role="progressbar"
+                             style="width: @gauge.Percent%"
+                             aria-valuenow="@gauge.Units"
+                             aria-valuemin="0"
+                             aria-valuemax="40"></div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <form asp-action="Adjust" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="hospitalId" value="@Model.Hospital.Id" />
+                            <input type="hidden" name="bloodType" value="@gauge.BloodType" />
+                            <input type="hidden" name="delta" value="-1" />
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">−1</button>
+                        </form>
+                        <form asp-action="Adjust" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="hospitalId" value="@Model.Hospital.Id" />
+                            <input type="hidden" name="bloodType" value="@gauge.BloodType" />
+                            <input type="hidden" name="delta" value="1" />
+                            <button class="btn btn-sm btn-outline-success" type="submit">+1</button>
+                        </form>
+                        <form asp-action="Adjust" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="hospitalId" value="@Model.Hospital.Id" />
+                            <input type="hidden" name="bloodType" value="@gauge.BloodType" />
+                            <input type="hidden" name="delta" value="5" />
+                            <button class="btn btn-sm btn-outline-primary" type="submit">+5 restock</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+}

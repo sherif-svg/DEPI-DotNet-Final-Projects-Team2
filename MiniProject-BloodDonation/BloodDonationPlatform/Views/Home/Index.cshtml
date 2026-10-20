@@ -1,8 +1,98 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    ViewData["FullWidth"] = true;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero-section">
+    <div class="container position-relative">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-8">
+                <span class="status-badge mb-3">
+                    <span class="status-dot"></span>
+                    Urgent Blood Donation System
+                </span>
+                <h1 class="hero-title mt-3 mb-3">Precision matching for life-saving blood supply.</h1>
+                <p class="lead hero-lead mb-4">
+                    A medical-tech platform that connects hospitals, verified donors, and urgent requests in real time—
+                    so the right blood type reaches the right patient faster.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a class="cta-btn cta-primary" asp-controller="BloodRequests" asp-action="Index">
+                        <i class="bi bi-plus-circle"></i> Request Blood
+                    </a>
+                    <a class="cta-btn cta-donor" asp-area="Identity" asp-page="/Account/Register">
+                        <i class="bi bi-person-plus"></i> Become a Donor
+                    </a>
+                    <a class="cta-btn cta-hospital" asp-area="Identity" asp-page="/Account/Login">
+                        <i class="bi bi-hospital"></i> Hospital Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="metrics-bar">
+    <div class="container">
+        <div class="metrics-panel row g-0 text-center">
+            <div class="col-md-4 metric-item border-end">
+                <i class="bi bi-lightning-charge-fill"></i>
+                <p class="metric-label mt-2">24/7 Matching</p>
+                <small class="text-muted">Always-on request routing</small>
+            </div>
+            <div class="col-md-4 metric-item border-end">
+                <i class="bi bi-shield-check"></i>
+                <p class="metric-label mt-2">Verified Donors</p>
+                <small class="text-muted">Identity-backed donor profiles</small>
+            </div>
+            <div class="col-md-4 metric-item">
+                <i class="bi bi-clipboard2-pulse"></i>
+                <p class="metric-label mt-2">Real-time Hospital Stock</p>
+                <small class="text-muted">Live inventory visibility</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body p-4">
+                        <span class="icon-badge icon-crimson"><i class="bi bi-droplet-fill"></i></span>
+                        <h2 class="h5">Blood Requests</h2>
+                        <p class="text-muted">Post urgent blood needs and track pending matches with hospital-grade request flow.</p>
+                        <a class="card-action card-action-crimson" asp-controller="BloodRequests" asp-action="Index">
+                            View requests <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body p-4">
+                        <span class="icon-badge icon-ocean"><i class="bi bi-geo-alt-fill"></i></span>
+                        <h2 class="h5">Donor Search</h2>
+                        <p class="text-muted">Find compatible donors by blood type and location so matches can be confirmed faster.</p>
+                        <a class="card-action card-action-ocean" asp-controller="Donors" asp-action="Index">
+                            Find donors <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body p-4">
+                        <span class="icon-badge icon-slate"><i class="bi bi-hospital-fill"></i></span>
+                        <h2 class="h5">Hospital Inventory</h2>
+                        <p class="text-muted">Review stock levels and coordinate replenishment before critical shortages occur.</p>
+                        <a class="card-action card-action-slate" asp-controller="Hospitals" asp-action="Inventory">
+                            Open inventory <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

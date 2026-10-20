@@ -1,0 +1,118 @@
+@model BloodRequestDetailsViewModel
+@using BloodDonationPlatform.Enums
+@{
+    ViewData["Title"] = $"Request #{Model.Request.Id}";
+    var request = Model.Request;
+    var canAdvance = request.Status is RequestStatus.Pending or RequestStatus.Matching;
+}
+
+<div class="page-toolbar">
+    <div>
+        <span class="status-badge mb-2"><span class="status-dot"></span> Case #@request.Id</span>
+        <h1 class="page-title mt-2">@request.HospitalName</h1>
+        <p class="text-muted mb-0">
+            Pipeline: Pending → Matching → Fulfilled (or Cancelled).
+        </p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        @if (request.Status == RequestStatus.Pending)
+        {
+            <form asp-action="StartMatching" asp-route-id="@request.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="cta-btn cta-hospital border-0">
+                    <i class="bi bi-diagram-3"></i> Start matching
+                </button>
+            </form>
+        }
+        @if (canAdvance)
+        {
+            <form asp-action="Cancel" asp-route-id="@request.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="cta-btn cta-donor">Cancel request</button>
+            </form>
+        }
+        <a class="cta-btn cta-donor" asp-action="Index">Back</a>
+    </div>
+</div>
+
+<div class="card feature-card mb-4">
+    <div class="card-body p-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="text-muted small">Blood type</div>
+                <span class="blood-badge @request.RequiredBloodType.ToBadgeCss()">@request.RequiredBloodType.ToDisplay()</span>
+            </div>
+            <div class="col-md-3">
+                <div class="text-muted small">Quantity</div>
+                <strong>@request.Quantity units</strong>
+            </div>
+            <div class="col-md-3">
+                <div class="text-muted small">Urgency</div>
+                <span class="urgency-badge @request.Urgency.ToBadgeCss()">@request.Urgency</span>
+            </div>
+            <div class="col-md-3">
+                <div class="text-muted small">Status</div>
+                <span class="pipeline-badge @request.Status.ToBadgeCss()">@request.Status</span>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(request.Notes))
+            {
+                <div class="col-12">
+                    <div class="text-muted small">Notes</div>
+                    <p class="mb-0">@request.Notes</p>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(request.MatchedDonorName))
+            {
+                <div class="col-12">
+                    <div class="text-muted small">Matched donor</div>
+                    <strong>@request.MatchedDonorName</strong>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<h2 class="h5 mb-3">Ranked compatible donors</h2>
+<div class="row g-3">
+@foreach (var match in Model.Matches)
+{
+    <div class="col-md-6 col-xl-4">
+        <div class="card donor-card h-100 @(match.IsEligible ? "" : "donor-card-ineligible")">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h3 class="h6 mb-0">@match.Donor.Name</h3>
+                    <span class="blood-badge @match.Donor.BloodType.ToBadgeCss()">@match.Donor.BloodType.ToDisplay()</span>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="distance-badge"><i class="bi bi-geo-alt"></i> @match.DistanceKm km</span>
+                    <span class="score-badge">Score @match.CompatibilityScore</span>
+                    @if (match.IsEligible)
+                    {
+                        <span class="eligible-badge"><i class="bi bi-check-circle"></i> Eligible</span>
+                    }
+                    else
+                    {
+                        <span class="wait-badge">56-day gap / unavailable</span>
+                    }
+                </div>
+                @if (canAdvance && match.IsEligible)
+                {
+                    <form asp-action="Fulfill" asp-route-id="@request.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="donorId" value="@match.Donor.Id" />
+                        <button type="submit" class="cta-btn cta-primary w-100 justify-content-center border-0">
+                            <i class="bi bi-check-circle"></i> Fulfill with this donor
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+}
+@if (!Model.Matches.Any())
+{
+    <div class="col-12">
+        <div class="alert alert-light border">No compatible donors in the registry yet.</div>
+    </div>
+}
+</div>

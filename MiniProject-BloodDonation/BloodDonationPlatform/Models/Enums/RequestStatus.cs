@@ -3,7 +3,7 @@ namespace BloodDonationPlatform.Enums;
 public enum RequestStatus
 {
     Pending,
-    Approved,
+    Matching,
     Fulfilled,
     Cancelled
 }

@@ -1,0 +1,56 @@
+@model IEnumerable<BloodRequestDTO>
+@using BloodDonationPlatform.Enums
+@{
+    ViewData["Title"] = "Blood Requests";
+}
+
+<div class="page-toolbar">
+    <div>
+        <span class="status-badge mb-2"><span class="status-dot"></span> Request pipeline</span>
+        <h1 class="page-title mt-2">Blood requests</h1>
+        <p class="text-muted mb-0">Track Pending, Matching, Fulfilled, and Cancelled cases with ABO/Rh badges.</p>
+    </div>
+    <a class="cta-btn cta-primary" asp-action="Create">
+        <i class="bi bi-plus-lg"></i> New request
+    </a>
+</div>
+
+<div class="card feature-card">
+    <div class="table-responsive">
+        <table class="table table-medical mb-0">
+            <thead>
+                <tr>
+                    <th>Hospital</th>
+                    <th>Blood type</th>
+                    <th>Qty</th>
+                    <th>Urgency</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td class="fw-semibold">@request.HospitalName</td>
+                    <td><span class="blood-badge @request.RequiredBloodType.ToBadgeCss()">@request.RequiredBloodType.ToDisplay()</span></td>
+                    <td>@request.Quantity</td>
+                    <td><span class="urgency-badge @request.Urgency.ToBadgeCss()">@request.Urgency</span></td>
+                    <td><span class="pipeline-badge @request.Status.ToBadgeCss()">@request.Status</span></td>
+                    <td class="text-muted small">@request.CreatedAt.ToLocalTime().ToString("g")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-pill btn-pill-ghost-dark" asp-action="Details" asp-route-id="@request.Id">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        @if (!Model.Any())
+        {
+            <p class="text-muted p-4 mb-0">No blood requests yet.</p>
+        }
+    </div>
+</div>
