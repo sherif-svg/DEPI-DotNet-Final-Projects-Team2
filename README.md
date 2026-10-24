@@ -25,6 +25,7 @@ As a team, we adhere to the following enterprise practices across all modules:
 - **Clean Architecture & SOLID Principles**
 - **Security:** Strict Role-Based Access Control (RBAC) and Data Validation.
 - **Source Control:** Semantic commit messaging and structured branching.
-
+  
+Final Project Presentation Video Link : https://drive.google.com/file/d/1mhL0_rBKvg5F0xXu8blWmsHEIS31aBaf/view?usp=sharing
 ---
 *Built with passion by Team 2 - DEPI 2026.*
