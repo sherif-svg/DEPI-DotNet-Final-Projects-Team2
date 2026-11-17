@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SocialMediaManager.AI/SocialMediaManager.AI.csproj" />
+    <Project Path="src/SocialMediaManager.Application/SocialMediaManager.Application.csproj" />
+    <Project Path="src/SocialMediaManager.Domain/SocialMediaManager.Domain.csproj" />
+    <Project Path="src/SocialMediaManager.Infrastructure/SocialMediaManager.Infrastructure.csproj" />
+    <Project Path="src/SocialMediaManager.Web/SocialMediaManager.Web.csproj" />
+  </Folder>
+</Solution>
