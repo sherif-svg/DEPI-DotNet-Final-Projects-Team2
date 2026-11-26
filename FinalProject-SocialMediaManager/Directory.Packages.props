@@ -3,4 +3,16 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.0" />
+    <PackageVersion Include="Hangfire.Core" Version="1.8.14" />
+    <PackageVersion Include="Hangfire.SqlServer" Version="1.8.14" />
+    <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14" />
+  </ItemGroup>
 </Project>
