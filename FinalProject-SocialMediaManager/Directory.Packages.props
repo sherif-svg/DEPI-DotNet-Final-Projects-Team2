@@ -2,6 +2,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+      <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +16,9 @@
     <PackageVersion Include="Hangfire.SqlServer" Version="1.8.14" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14" />
       <PackageVersion Include="Azure.Storage.Blobs" Version="12.23.0" />
+      <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
   </ItemGroup>
 </Project>
+
+
+
