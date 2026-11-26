@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using SocialMediaManager.Application.Interfaces;
 using SocialMediaManager.Infrastructure.Identity;
 using SocialMediaManager.Infrastructure.Persistence;
 using SocialMediaManager.Infrastructure.Security;
 using SocialMediaManager.Infrastructure.Services.SocialAdapters;
+using SocialMediaManager.Infrastructure.Services.Storage;
 
 namespace SocialMediaManager.Infrastructure;
 
@@ -69,6 +71,10 @@ public static class DependencyInjection
 
         services.AddHangfireServer();
         services.AddDataProtection();
+
+        services.Configure<BlobStorageSettings>(configuration.GetSection("BlobStorage"));
+        services.AddScoped<IBlobStorageService, AzureBlobStorageService>();
+
         services.Configure<OAuthSettings>(configuration.GetSection("OAuth"));
         services.AddSingleton<ITokenProtector, TokenProtector>();
         services.AddScoped<ISocialAdapter, MockMetaAdapter>();

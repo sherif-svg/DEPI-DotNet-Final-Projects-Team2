@@ -1,4 +1,4 @@
-
+﻿
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
@@ -14,5 +14,6 @@
     <PackageVersion Include="Hangfire.Core" Version="1.8.14" />
     <PackageVersion Include="Hangfire.SqlServer" Version="1.8.14" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14" />
+      <PackageVersion Include="Azure.Storage.Blobs" Version="12.23.0" />
   </ItemGroup>
 </Project>
