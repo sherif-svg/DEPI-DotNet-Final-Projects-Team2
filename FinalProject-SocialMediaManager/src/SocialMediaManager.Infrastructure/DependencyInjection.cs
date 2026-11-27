@@ -1,15 +1,18 @@
 ﻿using System.Text;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaManager.Application.Interfaces;
+using SocialMediaManager.Infrastructure.BackgroundJobs;
 using SocialMediaManager.Infrastructure.Identity;
 using SocialMediaManager.Infrastructure.Persistence;
 using SocialMediaManager.Infrastructure.Security;
+using SocialMediaManager.Infrastructure.Services;
 using SocialMediaManager.Infrastructure.Services.SocialAdapters;
 using SocialMediaManager.Infrastructure.Services.Storage;
 
@@ -81,6 +84,23 @@ public static class DependencyInjection
         services.AddScoped<ISocialAdapter, MockXAdapter>();
         services.AddScoped<ISocialAdapter, MockLinkedInAdapter>();
 
+        // Repositories, Unit of Work, Scheduling & Publishing
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<ICampaignRepository, CampaignRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<IJobScheduler, HangfireJobScheduler>();
+        services.AddScoped<IPostPublishingService, PostPublishingService>();
+
         return services;
+    }
+
+    public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
+    {
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            Authorization = [new HangfireDashboardAuthorizationFilter()]
+        });
+
+        return app;
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SocialMediaManager.Domain.Entities;
 using SocialMediaManager.Infrastructure.Identity;
 
 namespace SocialMediaManager.Infrastructure.Persistence;
@@ -10,6 +11,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+
+    public DbSet<Campaign> Campaigns => Set<Campaign>();
+    public DbSet<Post> Posts => Set<Post>();
+    public DbSet<SocialAccount> SocialAccounts => Set<SocialAccount>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
